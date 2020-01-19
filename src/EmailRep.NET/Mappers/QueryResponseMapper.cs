@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using EmailRep.NET.Internal;
 
-namespace EmailRep.NET.Internal
+namespace EmailRep.NET.Mappers
 {
     internal class QueryResponseMapper
     {

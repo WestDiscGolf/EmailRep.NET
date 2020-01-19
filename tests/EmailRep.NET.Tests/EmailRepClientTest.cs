@@ -11,6 +11,8 @@ namespace EmailRep.NET.Tests
 {
     public class EmailRepClientTest
     {
+        // todo: blog post - "Using justeat.HttpClientInterception to test strongly typed clients in .net core 3.1"
+
         [Fact]
         public async Task Test()
         {

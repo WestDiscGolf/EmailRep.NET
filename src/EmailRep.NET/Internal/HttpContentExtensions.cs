@@ -14,8 +14,12 @@ namespace EmailRep.NET.Internal
                 WriteIndented = true
             };
 
-            using var responseStream = await content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<TResult>(responseStream, options);
+            // easier for debugging
+            var jsonString = await content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<TResult>(jsonString, options);
+
+            //using var responseStream = await content.ReadAsStreamAsync();
+            //return await JsonSerializer.DeserializeAsync<TResult>(responseStream, options);
         }
     }
 }

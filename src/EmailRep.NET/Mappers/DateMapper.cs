@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace EmailRep.NET.Internal
+namespace EmailRep.NET.Mappers
 {
     internal class DateMapper
     {

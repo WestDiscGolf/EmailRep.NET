@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using EmailRep.NET.Internal;
+using EmailRep.NET.Mappers;
 using QueryResponse = EmailRep.NET.Models.QueryResponse;
 
 namespace EmailRep.NET
@@ -32,19 +34,14 @@ namespace EmailRep.NET
             // setup the request details
             SetupRequest();
 
+            // make the request and handle the response if error returned
             var response = await _httpClient.GetAsync($"{emailAddress}", cancellationToken);
+            await ErrorResponseHandler.HandleResponse(response);
 
-            // response.StatusCode = 429;
-            // {"status": "fail", "reason": "exceeded daily limit. please wait 24 hrs or visit emailrep.io/key for an api key."}
-
-
-            // todo: check response; raise exceptions
-            // todo: map from internal to external
+            // if we've got here then we have a valid response and we can read and map accordingly
             var source = await response.Content.ReadAsAsync<Internal.QueryResponse>();
-
             
-            // todo: push out the door
-
+            // map and push out the door
             return await QueryResponseMapper.MapAsync(source);
         }
 
@@ -58,21 +55,6 @@ namespace EmailRep.NET
             {
                 _httpClient.DefaultRequestHeaders.Add(ApiKeyHeader, _settings.ApiKey);
             }
-        }
-    }
-
-    public class EmailRepConfigurationException : Exception
-    {
-        public EmailRepConfigurationException(string message) : base(message)
-        {
-        }
-    }
-
-    // todo: need to determine the types of exception and status?
-    public class EmailRepException : Exception
-    {
-        public EmailRepException(string message) : base(message)
-        {
         }
     }
 }

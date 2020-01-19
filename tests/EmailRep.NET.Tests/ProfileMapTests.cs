@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using EmailRep.NET.Internal;
+using EmailRep.NET.Mappers;
 using EmailRep.NET.Models;
 using FluentAssertions;
 using Xunit;
