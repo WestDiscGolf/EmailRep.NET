@@ -5,6 +5,7 @@
     <UserSecretsId>7218eb26-00fb-48a3-9f68-912482d9cdab</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\EmailRep.NET.Extensions.DependencyInjection\EmailRep.NET.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\src\EmailRep.NET\EmailRep.NET.csproj" />
   </ItemGroup>
 </Project>
