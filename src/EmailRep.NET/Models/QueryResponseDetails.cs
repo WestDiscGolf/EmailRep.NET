@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using J = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 
-namespace EmailRep.NET.Internal
+namespace EmailRep.NET.Models
 {
-    internal class Details
+    public class QueryResponseDetails
     {
         [J("blacklisted")]
         public bool Blacklisted { get; set; }
@@ -72,6 +72,6 @@ namespace EmailRep.NET.Internal
         public bool DmarcEnforced { get; set; }
 
         [J("profiles")]
-        public List<string> Profiles { get; set; }
+        public List<Profile> Profiles { get; set; }
     }
 }

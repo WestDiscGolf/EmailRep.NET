@@ -1,14 +1,14 @@
 ﻿using J = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 
-namespace EmailRep.NET.Internal
+namespace EmailRep.NET.Models
 {
-    internal class QueryResponse
+    public class QueryResponse
     {
         [J("email")]
         public string Email { get; set; }
 
         [J("reputation")]
-        public string Reputation { get; set; }
+        public string /*Reputation*/ Reputation { get; set; }
 
         [J("suspicious")]
         public bool Suspicious { get; set; }
@@ -17,6 +17,6 @@ namespace EmailRep.NET.Internal
         public long References { get; set; }
 
         [J("details")]
-        public Details Details { get; set; } = new Details();
+        public QueryResponseDetails Details { get; set; } = new QueryResponseDetails();
     }
 }

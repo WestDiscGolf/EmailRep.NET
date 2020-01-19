@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using EmailRep.NET.Internal;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using EmailRep.NET.Models;
 
 namespace EmailRep.NET
 {
@@ -12,7 +13,8 @@ namespace EmailRep.NET
         /// Query the emailrep.io email database.
         /// </summary>
         /// <param name="emailAddress">Valid email address.</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<QueryResponse> QueryEmailAsync(string emailAddress);
+        Task<QueryResponse> QueryEmailAsync(string emailAddress, CancellationToken cancellationToken = default);
     }
 }

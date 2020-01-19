@@ -6,6 +6,7 @@ using EmailRep.NET;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -13,11 +14,19 @@ namespace AspNetCoreExample
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<EmailRepClientSettings>();
+            var settings = Configuration.GetSection("EmailRepNet").Get<EmailRepClientSettings>();
+            services.AddSingleton(settings);
             services.AddHttpClient<IEmailRepClient, EmailRepClient>();
         }
 
@@ -39,7 +48,7 @@ namespace AspNetCoreExample
                 {
                     var response = await client.QueryEmailAsync("bill@microsoft.com");
 
-                    await context.Response.WriteAsync(response.Email);
+                    await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
                 });
             });
         }
