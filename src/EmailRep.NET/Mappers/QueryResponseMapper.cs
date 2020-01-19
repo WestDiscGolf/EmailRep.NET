@@ -30,16 +30,12 @@ namespace EmailRep.NET.Mappers
             target.Details.CredentialsLeaked = source.Details.CredentialsLeaked;
             target.Details.CredentialsLeakedRecent = source.Details.CredentialsLeakedRecent;
             target.Details.DataBreach = source.Details.DataBreach;
-
-            // todo: change to datetime offset and map
-            target.Details.FirstSeen = source.Details.FirstSeen;
-            target.Details.LastSeen  = source.Details.LastSeen;
-
+            target.Details.FirstSeen = await DateMapper.MapAsync(source.Details.FirstSeen);
+            target.Details.LastSeen  = await DateMapper.MapAsync(source.Details.LastSeen);
             target.Details.DomainExists = source.Details.DomainExists;
             target.Details.DomainReputation = source.Details.DomainReputation;
             target.Details.NewDomain = source.Details.NewDomain;
             target.Details.DaysSinceDomainCreation = source.Details.DaysSinceDomainCreation;
-
             target.Details.SuspiciousTld = source.Details.SuspiciousTld;
             target.Details.Spam = source.Details.Spam;
             target.Details.FreeProvider = source.Details.FreeProvider;
