@@ -15,15 +15,12 @@ namespace EmailRep.NET.Mappers
             // todo: blog post; "why async all the things?"
             // -> consistency across the api surface
             // -> 
-
+            
             var target = new Models.QueryResponse();
             target.Email = source.Email;
-
-            // todo: enum mapping
-            target.Reputation = source.Reputation;
+            target.Reputation = await ReputationMapper.MapAsync(source.Reputation);
             target.Suspicious = source.Suspicious;
             target.References = source.References;
-
             target.Details.Blacklisted = source.Details.Blacklisted;
             target.Details.MaliciousActivity = source.Details.MaliciousActivity;
             target.Details.MaliciousActivityRecent = source.Details.MaliciousActivityRecent;
@@ -46,7 +43,6 @@ namespace EmailRep.NET.Mappers
             target.Details.Spoofable = source.Details.Spoofable;
             target.Details.SpfStrict = source.Details.SpfStrict;
             target.Details.DmarcEnforced = source.Details.DmarcEnforced;
-
             target.Details.Profiles = await ProfileMapper.MapAsync(source.Details.Profiles);
 
             return target;

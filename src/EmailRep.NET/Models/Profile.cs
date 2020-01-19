@@ -1,16 +1,19 @@
-﻿namespace EmailRep.NET.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EmailRep.NET.Models
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))] 
     public enum Profile
     {
         None = 0,
-        Spotify,
+        Angellist,
+        Flickr,
+        Instagram,
         LinkedIn,
         MySpace,
-        Instagram,
+        Pinterest,
+        Spotify,
         Twitter,
-        Flickr,
         Vimeo,
-        Angellist,
-        Pinterest
     }
 }

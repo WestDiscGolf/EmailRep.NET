@@ -8,7 +8,7 @@ namespace EmailRep.NET.Models
         public string Email { get; set; }
 
         [J("reputation")]
-        public string /*Reputation*/ Reputation { get; set; }
+        public Reputation Reputation { get; set; }
 
         [J("suspicious")]
         public bool Suspicious { get; set; }

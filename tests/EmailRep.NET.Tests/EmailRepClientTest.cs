@@ -13,7 +13,7 @@ namespace EmailRep.NET.Tests
     {
         // todo: blog post - "Using justeat.HttpClientInterception to test strongly typed clients in .net core 3.1"
 
-        [Fact]
+        [Fact(Skip = "WIP")]
         public async Task Test()
         {
             // Arrange
