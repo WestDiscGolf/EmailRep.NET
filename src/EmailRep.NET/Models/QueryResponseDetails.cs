@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using J = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 
 namespace EmailRep.NET.Models
@@ -24,10 +25,10 @@ namespace EmailRep.NET.Models
         public bool DataBreach { get; set; }
 
         [J("first_seen")]
-        public string FirstSeen { get; set; }
+        public DateTimeOffset FirstSeen { get; set; }
 
         [J("last_seen")]
-        public string LastSeen { get; set; }
+        public DateTimeOffset LastSeen { get; set; }
 
         [J("domain_exists")]
         public bool DomainExists { get; set; }
