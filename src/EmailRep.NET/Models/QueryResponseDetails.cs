@@ -73,6 +73,6 @@ namespace EmailRep.NET.Models
         public bool DmarcEnforced { get; set; }
 
         [J("profiles")]
-        public List<Profile> Profiles { get; set; }
+        public List<OnlineProfile> Profiles { get; set; }
     }
 }

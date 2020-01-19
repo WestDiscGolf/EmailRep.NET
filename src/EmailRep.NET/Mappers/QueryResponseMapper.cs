@@ -43,7 +43,7 @@ namespace EmailRep.NET.Mappers
             target.Details.Spoofable = source.Details.Spoofable;
             target.Details.SpfStrict = source.Details.SpfStrict;
             target.Details.DmarcEnforced = source.Details.DmarcEnforced;
-            target.Details.Profiles = await ProfileMapper.MapAsync(source.Details.Profiles);
+            target.Details.Profiles = await OnlineProfileMapper.MapAsync(source.Details.Profiles);
 
             return target;
         }
