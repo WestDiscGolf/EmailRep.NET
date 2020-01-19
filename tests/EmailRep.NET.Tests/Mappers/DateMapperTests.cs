@@ -19,7 +19,9 @@ namespace EmailRep.NET.Tests.Mappers
             var result = await DateMapper.MapAsync(source);
 
             // Assert
-            result.Should().Be(expected);
+            result.Year.Should().Be(expected.Year);
+            result.Month.Should().Be(expected.Month);
+            result.Day.Should().Be(expected.Day);
         }
 
         public static IEnumerable<object[]> Data()
