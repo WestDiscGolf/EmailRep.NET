@@ -19,9 +19,4 @@
     <ProjectReference Include="..\..\src\EmailRep.NET\EmailRep.NET.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MappersTests\" />
-    <Folder Include="InternalTests\" />
-  </ItemGroup>
-
 </Project>
