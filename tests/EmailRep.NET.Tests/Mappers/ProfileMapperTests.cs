@@ -1,9 +1,13 @@
-﻿using EmailRep.NET.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using EmailRep.NET.Mappers;
+using EmailRep.NET.Models;
+using FluentAssertions;
 using Xunit;
 
 namespace EmailRep.NET.Tests.Mappers
 {
-    public class ProfileMapTests
+    public class ProfileMapperTests
     {
         [Theory]
         [InlineData("", Profile.None)]
@@ -16,13 +20,16 @@ namespace EmailRep.NET.Tests.Mappers
         [InlineData("vimeo", Profile.Vimeo)]
         [InlineData("angellist", Profile.Angellist)]
         [InlineData("pinterest", Profile.Pinterest)]
-        public void Map(string source, Profile expected)
+        public async Task Map(string source, Profile expected)
         {
             // Arrange
 
             // Act
+            var result = await ProfileMapper.MapAsync(new List<string>{ source });
 
             // Assert
+            result.Count.Should().Be(1);
+            result[0].Should().Be(expected);
         }
     }
 }
