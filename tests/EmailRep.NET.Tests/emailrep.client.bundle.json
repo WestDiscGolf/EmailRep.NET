@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "emailrep.client.bundle",
+  "comment": "A bundle of HTTP requests",
+  "items": [
+    {
+      "id": "success for bill",
+      "comment": "Returns the full demo set for bill@microsoft",
+      "uri": "https://emailrep.io/bill@microsoft.com",
+      "contentFormat": "json",
+      "contentJson": {
+        "email": "bill@microsoft.com",
+        "reputation": "high",
+        "suspicious": false,
+        "references": 59,
+        "details": {
+          "blacklisted": false,
+          "malicious_activity": false,
+          "malicious_activity_recent": false,
+          "credentials_leaked": true,
+          "credentials_leaked_recent": false,
+          "data_breach": true,
+          "first_seen": "07/01/2008",
+          "last_seen": "02/25/2019",
+          "domain_exists": true,
+          "domain_reputation": "high",
+          "new_domain": false,
+          "days_since_domain_creation": 10289,
+          "suspicious_tld": false,
+          "spam": false,
+          "free_provider": false,
+          "disposable": false,
+          "deliverable": true,
+          "accept_all": true,
+          "valid_mx": true,
+          "spoofable": false,
+          "spf_strict": true,
+          "dmarc_enforced": true,
+          "profiles": [
+            "spotify",
+            "linkedin",
+            "myspace",
+            "instagram",
+            "twitter",
+            "flickr",
+            "vimeo",
+            "angellist",
+            "pinterest"
+          ]
+        }
+      }
+    },
+    {
+      "id": "terms",
+      "comment": "Returns the Ts & Cs",
+      "uri": "https://public.je-apis.com/terms",
+      "contentFormat": "json",
+      "contentJson": {
+        "Id": 1,
+        "Link": "https://www.just-eat.co.uk/privacy-policy"
+      }
+    }
+  ]
+}

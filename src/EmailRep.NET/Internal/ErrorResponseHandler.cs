@@ -49,8 +49,9 @@ namespace EmailRep.NET.Internal
                         break;
                 }
 
-                var error = await message.Content.ReadAsAsync<ErrorResponse>();
-                throw new EmailRepResponseException(errorCode, error.Reason);
+                // ReSharper disable once PossibleNullReferenceException
+                var error = await message.Content?.ReadAsAsync<ErrorResponse>();
+                throw new EmailRepResponseException(errorCode, error?.Reason ?? "Unknown error occured.");
             }
         }
     }

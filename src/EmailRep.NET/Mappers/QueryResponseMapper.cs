@@ -18,7 +18,7 @@ namespace EmailRep.NET.Mappers
             
             var target = new Models.QueryResponse();
             target.Email = source.Email;
-            target.Reputation = await ReputationMapper.MapAsync(source.Reputation);
+            target.Reputation = await ProfileReputationMapper.MapAsync(source.Reputation);
             target.Suspicious = source.Suspicious;
             target.References = source.References;
             target.Details.Blacklisted = source.Details.Blacklisted;
@@ -30,7 +30,7 @@ namespace EmailRep.NET.Mappers
             target.Details.FirstSeen = await DateMapper.MapAsync(source.Details.FirstSeen);
             target.Details.LastSeen  = await DateMapper.MapAsync(source.Details.LastSeen);
             target.Details.DomainExists = source.Details.DomainExists;
-            target.Details.DomainReputation = source.Details.DomainReputation;
+            target.Details.DomainReputation = await DomainReputationMapper.MapAsync(source.Details.DomainReputation);
             target.Details.NewDomain = source.Details.NewDomain;
             target.Details.DaysSinceDomainCreation = source.Details.DaysSinceDomainCreation;
             target.Details.SuspiciousTld = source.Details.SuspiciousTld;

@@ -3,7 +3,7 @@
 namespace EmailRep.NET.Models
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum Reputation
+    public enum ProfileReputation
     {
         None = 0,
         High,

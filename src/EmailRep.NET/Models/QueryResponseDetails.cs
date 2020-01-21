@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using J = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 
 namespace EmailRep.NET.Models
@@ -34,7 +35,7 @@ namespace EmailRep.NET.Models
         public bool DomainExists { get; set; }
 
         [J("domain_reputation")]
-        public string DomainReputation { get; set; }
+        public DomainReputation DomainReputation { get; set; }
 
         [J("new_domain")]
         public bool NewDomain { get; set; }
@@ -74,5 +75,16 @@ namespace EmailRep.NET.Models
 
         [J("profiles")]
         public List<OnlineProfile> Profiles { get; set; }
+    }
+
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum DomainReputation
+    {
+        None = 0,
+        High,
+        Medium,
+        Low,
+        NoneApplicable
     }
 }

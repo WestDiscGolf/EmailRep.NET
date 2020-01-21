@@ -19,4 +19,10 @@
     <ProjectReference Include="..\..\src\EmailRep.NET\EmailRep.NET.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="emailrep.client.bundle.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
