@@ -18,6 +18,11 @@ namespace EmailRep.NET
 
         private const string ApiKeyHeader = "Key";
 
+        /// <summary>
+        /// Default constructor to create a new <see cref="EmailRepClient"/>.
+        /// </summary>
+        /// <param name="httpClient">A <see cref="HttpClient"/> instance. This can be provided manually or through dependency injection.</param>
+        /// <param name="settings">An optional <see cref="EmailRepClientSettings"/> instance. If not provided the <see cref="EmailRepClientSettings.Default"/> settings will be used.</param>
         public EmailRepClient(HttpClient httpClient, EmailRepClientSettings settings = default)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -25,6 +30,7 @@ namespace EmailRep.NET
             EmailRepClientSettingsValidator.Validate(_settings);
         }
 
+        /// <inheritdoc />
         public async Task<QueryResponse> QueryEmailAsync(string emailAddress, CancellationToken cancellationToken = default)
         {
             // validate the email address
@@ -44,6 +50,9 @@ namespace EmailRep.NET
             return await QueryResponseMapper.MapAsync(source);
         }
 
+        /// <summary>
+        /// Using the provided settings make sure the expected values are set ready for initiating a request using the httpclient.
+        /// </summary>
         private void SetupRequest()
         {
             _httpClient.BaseAddress = new Uri(_settings.BaseUrl);

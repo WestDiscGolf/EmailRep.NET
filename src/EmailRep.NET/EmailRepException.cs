@@ -7,6 +7,10 @@ namespace EmailRep.NET
     /// </summary>
     public class EmailRepException : Exception
     {
+        /// <summary>
+        /// Constructor of a <see cref="EmailRepException"/>.
+        /// </summary>
+        /// <param name="message">Error message</param>
         public EmailRepException(string message) : base(message)
         {
         }

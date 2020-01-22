@@ -13,8 +13,8 @@
         /// <summary>
         /// Constructor of a <see cref="EmailRepResponseException"/>. The <see cref="ErrorCode"/> and corresponding message are required.
         /// </summary>
-        /// <param name="errorCode"></param>
-        /// <param name="message"></param>
+        /// <param name="errorCode">Error request code.</param>
+        /// <param name="message">Error request message.</param>
         public EmailRepResponseException(ErrorCode errorCode, string message) : base(message)
         {
             ErrorCode = errorCode;

@@ -13,6 +13,8 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.0" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="3.0.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.11.0" />
   </ItemGroup>
 
   <ItemGroup>
