@@ -28,6 +28,7 @@ namespace EmailRep.NET.Tests.Mappers
         {
             yield return new object[] { "07/01/2008", new DateTimeOffset(2008, 07, 01, 0, 0, 0, TimeSpan.Zero) };
             yield return new object[] { "05/24/2019", new DateTimeOffset(2019, 05, 24, 0, 0, 0, TimeSpan.Zero) };
+            yield return new object[] { "never", DateTimeOffset.MinValue};
         }
     }
 }

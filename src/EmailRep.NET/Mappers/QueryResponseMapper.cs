@@ -3,24 +3,25 @@ using EmailRep.NET.Internal;
 
 namespace EmailRep.NET.Mappers
 {
+    /// <summary>
+    /// QueryResponseMapper class
+    /// </summary>
     internal class QueryResponseMapper
     {
+        /// <summary>
+        /// Maps the internal QueryResponse to the external, library owned, model classes.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static async Task<Models.QueryResponse> MapAsync(QueryResponse source)
         {
-            // todo: blog post; "Why have 2 pocos and write the mapping myself?"
-            // -> abstraction between their API surface and data model so either can change and not effect the other
-            // -> Map self as don't want to be reliant on an external library which would be throwing the kitchen sink at a specific problem
-            // -> expose dates as dates and not magic strings
-
-            // todo: blog post; "why async all the things?"
-            // -> consistency across the api surface
-            // -> 
-            
-            var target = new Models.QueryResponse();
-            target.Email = source.Email;
-            target.Reputation = await ProfileReputationMapper.MapAsync(source.Reputation);
-            target.Suspicious = source.Suspicious;
-            target.References = source.References;
+            var target = new Models.QueryResponse
+            {
+                Email = source.Email,
+                Reputation = await ProfileReputationMapper.MapAsync(source.Reputation),
+                Suspicious = source.Suspicious,
+                References = source.References
+            };
             target.Details.Blacklisted = source.Details.Blacklisted;
             target.Details.MaliciousActivity = source.Details.MaliciousActivity;
             target.Details.MaliciousActivityRecent = source.Details.MaliciousActivityRecent;

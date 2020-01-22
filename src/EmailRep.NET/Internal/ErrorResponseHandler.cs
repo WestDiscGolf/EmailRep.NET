@@ -33,6 +33,7 @@ namespace EmailRep.NET.Internal
                 // {"status": "fail", "reason": "exceeded daily limit. please wait 24 hrs or visit emailrep.io/key for an api key."}
 
                 ErrorCode errorCode = ErrorCode.Unknown;
+                ErrorResponse errorResponse = null;
 
                 switch (message.StatusCode)
                 {
@@ -49,9 +50,13 @@ namespace EmailRep.NET.Internal
                         break;
                 }
 
-                // ReSharper disable once PossibleNullReferenceException
-                var error = await message.Content?.ReadAsAsync<ErrorResponse>();
-                throw new EmailRepResponseException(errorCode, error?.Reason ?? "Unknown error occured.");
+                if (errorCode != ErrorCode.Unknown)
+                {
+                    // ReSharper disable once PossibleNullReferenceException
+                    errorResponse = await message.Content?.ReadAsAsync<ErrorResponse>();
+                }
+
+                throw new EmailRepResponseException(errorCode, message.StatusCode, errorResponse?.Reason ?? "Unknown error occured.");
             }
         }
     }

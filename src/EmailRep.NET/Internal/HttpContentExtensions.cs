@@ -15,11 +15,11 @@ namespace EmailRep.NET.Internal
             };
 
             // easier for debugging
-            var jsonString = await content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TResult>(jsonString, options);
+            //var jsonString = await content.ReadAsStringAsync();
+            //return JsonSerializer.Deserialize<TResult>(jsonString, options);
 
-            //using var responseStream = await content.ReadAsStreamAsync();
-            //return await JsonSerializer.DeserializeAsync<TResult>(responseStream, options);
+            using var responseStream = await content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<TResult>(responseStream, options);
         }
     }
 }

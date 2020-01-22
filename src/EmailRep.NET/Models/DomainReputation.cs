@@ -3,10 +3,10 @@
 namespace EmailRep.NET.Models
 {
     /// <summary>
-    /// The profile reputation ranking
+    /// The domain reputation ranking
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum ProfileReputation
+    public enum DomainReputation
     {
         /// <summary>
         /// None
@@ -27,5 +27,10 @@ namespace EmailRep.NET.Models
         /// Low
         /// </summary>
         Low,
+
+        /// <summary>
+        /// None applicable
+        /// </summary>
+        NoneApplicable
     }
 }

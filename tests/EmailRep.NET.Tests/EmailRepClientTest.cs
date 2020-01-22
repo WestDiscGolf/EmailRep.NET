@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using EmailRep.NET.Models;
 using FluentAssertions;
 using JustEat.HttpClientInterception;
@@ -8,10 +10,48 @@ namespace EmailRep.NET.Tests
 {
     public class EmailRepClientTest
     {
-        // todo: blog post - "Using justeat.HttpClientInterception to test strongly typed clients in .net core 3.1"
+        [Fact]
+        public async Task ClientSetWithDefaults()
+        {
+            // Arrange
+            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+
+            var client = options.CreateHttpClient();
+            var sut = new EmailRepClient(client);
+
+            // Act
+            await sut.QueryEmailAsync("bill@microsoft.com");
+
+            // Assert
+            client.BaseAddress.Should().Be(new Uri("https://emailrep.io/"));
+            client.DefaultRequestHeaders.UserAgent.Should().NotBeNull();
+            client.DefaultRequestHeaders.TryGetValues("User-Agent", out var values).Should().BeTrue();
+            values.FirstOrDefault().Should().Be(EmailRepClientSettings.Default.UserAgent);
+            client.DefaultRequestHeaders.TryGetValues("Key", out _).Should().BeFalse();
+        }
+
+        [Theory, InlineAutoMoqData]
+        public async Task ClientSetWithApiKey(string apiKey)
+        {
+            // Arrange
+            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+
+            var client = options.CreateHttpClient();
+            var settings = EmailRepClientSettings.Default;
+            settings.ApiKey = apiKey;
+            
+            var sut = new EmailRepClient(client, settings);
+
+            // Act
+            await sut.QueryEmailAsync("bill@microsoft.com");
+
+            // Assert
+            client.DefaultRequestHeaders.TryGetValues("Key", out var key).Should().BeTrue();
+            key.FirstOrDefault().Should().Be(apiKey);
+        }
 
         [Fact]
-        public async Task Test()
+        public async Task QueryEmailAsync_Mapping()
         {
             // Arrange
             var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
