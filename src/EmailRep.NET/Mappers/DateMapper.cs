@@ -14,9 +14,6 @@ namespace EmailRep.NET.Mappers
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Task<DateTimeOffset> MapAsync(string source)
-        {
-            return Task.FromResult(DateTimeOffset.TryParse(source, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out var converted) ? converted : DateTimeOffset.MinValue);
-        }
+        public static Task<DateTimeOffset> MapAsync(string source) => Task.FromResult(DateTimeOffset.TryParse(source, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out var converted) ? converted : DateTimeOffset.MinValue);
     }
 }

@@ -6,7 +6,7 @@ using EmailRep.NET.Models;
 namespace EmailRep.NET.Mappers
 {
     /// <summary>
-    /// Profile mapper
+    /// Online Profile mapper
     /// </summary>
     internal class OnlineProfileMapper
     {
@@ -15,16 +15,14 @@ namespace EmailRep.NET.Mappers
         /// </summary>
         /// <param name="source">The <see cref="List{String}"/> from the email rep api.</param>
         /// <returns>The list of mapped <see cref="OnlineProfile"/> values.</returns>
-        public static Task<List<OnlineProfile>> MapAsync(List<string> source)
-        {
-            return Task.FromResult(source.Select(Map).ToList());
-        }
+        public static Task<List<OnlineProfile>> MapAsync(List<string> source) => Task.FromResult(source.Select(Map).ToList());
 
-        private static OnlineProfile Map(string source)
-        {
-            // just use a simple look up for now. nothing fancy required.
-            return Lookup.TryGetValue(source, out var profile) ? profile : OnlineProfile.None;
-        }
+        /// <summary>
+        /// Map a single string source value to a corresponding <see cref="OnlineProfile"/> value.
+        /// </summary>
+        /// <param name="source">The string value from the email rep api.</param>
+        /// <returns>The individual mapped <see cref="OnlineProfile"/> value.</returns>
+        private static OnlineProfile Map(string source) => Lookup.TryGetValue(source, out var profile) ? profile : OnlineProfile.None;
 
         private static readonly Dictionary<string, OnlineProfile> Lookup = new Dictionary<string, OnlineProfile>
         {
