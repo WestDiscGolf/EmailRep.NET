@@ -1,7 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageId>EmailRep.NET</PackageId>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>0.1.0</Version>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Adam Storr aka @WestDiscGolf</Authors>
+    <PackageProjectUrl>https://github.com/WestDiscGolf/EmailRep.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WestDiscGolf/EmailRep.NET</RepositoryUrl>
+    <PackageTags>email-reputaion,email-checking, spam</PackageTags>
+    <PackageLicenseUrl>https://github.com/WestDiscGolf/EmailRep.NET/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>

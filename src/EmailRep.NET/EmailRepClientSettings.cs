@@ -24,8 +24,18 @@
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// Default settings static property.
+        /// Indicates if the Api Key has been specified in the settings.
         /// </summary>
-        public static EmailRepClientSettings Default = new EmailRepClientSettings();
+        public bool ApiKeySpecified => !string.IsNullOrWhiteSpace(ApiKey);
+
+        /// <summary>
+        /// Indicates if the base url has been specified in the settings.
+        /// </summary>
+        public bool BaseUrlSpecified => !string.IsNullOrWhiteSpace(BaseUrl);
+
+        /// <summary>
+        /// Indicates if a user agent value has been specified in the settings.
+        /// </summary>
+        public bool UserAgentSpecified => !string.IsNullOrWhiteSpace(UserAgent);
     }
 }

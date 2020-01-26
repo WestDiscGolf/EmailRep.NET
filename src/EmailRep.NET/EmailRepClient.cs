@@ -14,30 +14,32 @@ namespace EmailRep.NET
     public class EmailRepClient : IEmailRepClient
     {
         private readonly HttpClient _httpClient;
-        private readonly EmailRepClientSettings _settings;
-
-        private const string ApiKeyHeader = "Key";
-
+        
         /// <summary>
         /// Default constructor to create a new <see cref="EmailRepClient"/>.
         /// </summary>
         /// <param name="httpClient">A <see cref="HttpClient"/> instance. This can be provided manually or through dependency injection.</param>
-        /// <param name="settings">An optional <see cref="EmailRepClientSettings"/> instance. If not provided the <see cref="EmailRepClientSettings.Default"/> settings will be used.</param>
+        /// <param name="settings">An instance of the settings is .</param>
         public EmailRepClient(HttpClient httpClient, EmailRepClientSettings settings = default)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _settings = settings ?? EmailRepClientSettings.Default;
-            EmailRepClientSettingsValidator.Validate(_settings);
-        }
 
+            // make sure the http client is in a fit state to continue
+            _httpClient.SetBaseAddress(settings);
+            _httpClient.SetUserAgent(settings);
+            _httpClient.SetApiHeader(settings);
+            _httpClient.Validate();
+        }
+        
         /// <inheritdoc />
         public async Task<QueryResponse> QueryEmailAsync(string emailAddress, CancellationToken cancellationToken = default)
         {
-            // validate the email address
-            _ = emailAddress.IsValidEmail() ?? throw new EmailRepException("Invalid email address. Email must be valid.");
-
-            // setup the request details
-            SetupRequest();
+            // validate the email address; this is basic checking as many different opinions on how to validate email addresses
+            // and none of them are bullet proof. I am keeping away from the regex route as there is no perfect catch all one.
+            if (string.IsNullOrWhiteSpace(emailAddress))
+            {
+                throw new EmailRepException("Invalid email address. Email must be valid.");
+            }
 
             // make the request and handle the response if error returned
             var response = await _httpClient.GetAsync($"{emailAddress}", cancellationToken);
@@ -48,21 +50,6 @@ namespace EmailRep.NET
             
             // map and push out the door
             return await QueryResponseMapper.MapAsync(source);
-        }
-
-        /// <summary>
-        /// Using the provided settings make sure the expected values are set ready for initiating a request using the httpclient.
-        /// </summary>
-        private void SetupRequest()
-        {
-            _httpClient.BaseAddress = new Uri(_settings.BaseUrl);
-
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(_settings.UserAgent);
-
-            if (!string.IsNullOrWhiteSpace(_settings.ApiKey))
-            {
-                _httpClient.DefaultRequestHeaders.Add(ApiKeyHeader, _settings.ApiKey);
-            }
         }
     }
 }
