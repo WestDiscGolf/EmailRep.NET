@@ -11,7 +11,7 @@ namespace EmailRep.NET.Tests.Internal
     public class ErrorResponseHandlerTests
     {
         [Theory, InlineAutoMoqData]
-        public async Task Success_NoThrow(HttpResponseMessage message)
+        public void Success_NoThrow(HttpResponseMessage message)
         {
             // Arrange
             message.StatusCode = HttpStatusCode.OK;
@@ -28,7 +28,7 @@ namespace EmailRep.NET.Tests.Internal
         [InlineAutoMoqData(HttpStatusCode.Unauthorized,    "{\"status\": \"fail\", \"reason\": \"invalid api key\"}", ErrorCode.InvalidApiKey, "invalid api key")]
         [InlineAutoMoqData(HttpStatusCode.TooManyRequests, "{\"status\": \"fail\", \"reason\": \"exceeded daily limit. please wait 24 hrs or visit emailrep.io/key for an api key.\"}",
             ErrorCode.TooManyRequests, @"exceeded daily limit. please wait 24 hrs or visit emailrep.io/key for an api key.")]
-        public async Task ExpectedStatusCodes_ThrowAsExpected(HttpStatusCode statusCode, string json, ErrorCode expectedCode, string expectedMessage, HttpResponseMessage message)
+        public void ExpectedStatusCodes_ThrowAsExpected(HttpStatusCode statusCode, string json, ErrorCode expectedCode, string expectedMessage, HttpResponseMessage message)
         {
             // Arrange
             message.StatusCode = statusCode;
@@ -44,7 +44,7 @@ namespace EmailRep.NET.Tests.Internal
         }
 
         [Theory, InlineAutoMoqData]
-        public async Task UnknownStatusCode_ThrowsGenericError(HttpResponseMessage message)
+        public void UnknownStatusCode_ThrowsGenericError(HttpResponseMessage message)
         {
             // Arrange
             message.StatusCode = HttpStatusCode.Conflict;
