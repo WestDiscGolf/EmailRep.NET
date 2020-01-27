@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using EmailRep.NET.Models;
 using FluentAssertions;
 using JustEat.HttpClientInterception;
 using Xunit;
@@ -10,107 +9,136 @@ namespace EmailRep.NET.Tests
 {
     public class EmailRepClientTest
     {
-        [Fact]
-        public async Task ClientSetWithDefaults()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void QueryEmailAsync_InvalidEmail_ThrowsException(string emailAddress)
         {
             // Arrange
+            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client);
-
-            // Act
-            await sut.QueryEmailAsync("bill@microsoft.com");
-
-            // Assert
-            client.BaseAddress.Should().Be(new Uri("https://emailrep.io/"));
-            client.DefaultRequestHeaders.UserAgent.Should().NotBeNull();
-            client.DefaultRequestHeaders.TryGetValues("User-Agent", out var values).Should().BeTrue();
-            values.FirstOrDefault().Should().Be(EmailRepClientSettings.Default.UserAgent);
-            client.DefaultRequestHeaders.TryGetValues("Key", out _).Should().BeFalse();
-        }
-
-        [Theory, InlineAutoMoqData]
-        public async Task ClientSetWithApiKey(string apiKey)
-        {
-            // Arrange
-            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
-
-            var client = options.CreateHttpClient();
-            var settings = EmailRepClientSettings.Default;
-            settings.ApiKey = apiKey;
-            
             var sut = new EmailRepClient(client, settings);
 
             // Act
-            await sut.QueryEmailAsync("bill@microsoft.com");
+            Func<Task> result = () => sut.QueryEmailAsync(emailAddress);
 
             // Assert
-            client.DefaultRequestHeaders.TryGetValues("Key", out var key).Should().BeTrue();
-            key.FirstOrDefault().Should().Be(apiKey);
+            result.Should().ThrowExactly<EmailRepException>().WithMessage("Invalid email address. Email must be valid.");
         }
 
         [Fact]
-        public async Task QueryEmailAsync_Mapping()
+        public void QueryEmailAsync_InvalidEmail_ThrowsResponseException()
         {
             // Arrange
+            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client);
+            var sut = new EmailRepClient(client, settings);
 
             // Act
-            var response = await sut.QueryEmailAsync("bill@microsoft.com");
+            Func<Task> result = () => sut.QueryEmailAsync("invalid@bob");
 
             // Assert
-            response.Should().NotBeNull();
-            response.Email.Should().Be("bill@microsoft.com");
-            response.Reputation.Should().Be(ProfileReputation.High);
-            response.Suspicious.Should().BeFalse();
-            response.References.Should().Be(59);
-            response.Details.Should().NotBeNull();
+            result.Should().ThrowExactly<EmailRepResponseException>()
+                .Where(
+                    x => x.ErrorCode == ErrorCode.InvalidEmailAddress
+                         && x.OriginalCode == HttpStatusCode.BadRequest)
+                .WithMessage("invalid email");
+        }
 
-            var d = response.Details;
-            d.Blacklisted.Should().BeFalse();
-            d.MaliciousActivity.Should().BeFalse();
-            d.MaliciousActivityRecent.Should().BeFalse();
-            d.CredentialsLeaked.Should().BeTrue();
-            d.CredentialsLeakedRecent.Should().BeFalse();
-            d.DataBreach.Should().BeTrue();
-            d.FirstSeen.Year.Should().Be(2008);
-            d.FirstSeen.Month.Should().Be(7);
-            d.FirstSeen.Day.Should().Be(1);
-            d.LastSeen.Year.Should().Be(2019);
-            d.LastSeen.Month.Should().Be(2);
-            d.LastSeen.Day.Should().Be(25);
-            d.DomainExists.Should().BeTrue();
-            d.DomainReputation.Should().Be(DomainReputation.High);
-            d.NewDomain.Should().BeFalse();
-            d.DaysSinceDomainCreation.Should().Be(10289);
-            d.SuspiciousTld.Should().BeFalse();
-            d.Spam.Should().BeFalse();
-            d.FreeProvider.Should().BeFalse();
-            d.Disposable.Should().BeFalse();
-            d.Deliverable.Should().BeTrue();
-            d.AcceptAll.Should().BeTrue();
-            d.ValidMx.Should().BeTrue();
-            d.Spoofable.Should().BeFalse();
-            d.SpfStrict.Should().BeTrue();
-            d.DmarcEnforced.Should().BeTrue();
+        [Fact]
+        public void QueryEmailAsync_InvalidApiKey_ThrowsResponseException()
+        {
+            // Arrange
+            var settings = new EmailRepClientSettings();
+            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
 
-            var profiles = d.Profiles;
-            profiles.Should().Contain(new[]
-            {
-                OnlineProfile.Spotify, 
-                OnlineProfile.LinkedIn, 
-                OnlineProfile.MySpace, 
-                OnlineProfile.Instagram,
-                OnlineProfile.Twitter,
-                OnlineProfile.Flickr,
-                OnlineProfile.Vimeo, 
-                OnlineProfile.Angellist,
-                OnlineProfile.Pinterest
-            });
+            var client = options.CreateHttpClient();
+            var sut = new EmailRepClient(client, settings);
+
+            // Act
+            Func<Task> result = () => sut.QueryEmailAsync("api@example.com");
+
+            // Assert
+            result.Should().ThrowExactly<EmailRepResponseException>()
+                .Where(
+                    x => x.ErrorCode == ErrorCode.InvalidApiKey
+                         && x.OriginalCode == HttpStatusCode.Unauthorized)
+                .WithMessage("invalid api key");
+        }
+
+        [Fact]
+        public void QueryEmailAsync_DailyLimitHit_ThrowsResponseException()
+        {
+            // Arrange
+            var settings = new EmailRepClientSettings();
+            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+
+            var client = options.CreateHttpClient();
+            var sut = new EmailRepClient(client, settings);
+
+            // Act
+            Func<Task> result = () => sut.QueryEmailAsync("limit@example.com");
+
+            // Assert
+            result.Should().ThrowExactly<EmailRepResponseException>()
+                .Where(
+                    x => x.ErrorCode == ErrorCode.TooManyRequests
+                         && x.OriginalCode == HttpStatusCode.TooManyRequests)
+                .WithMessage("exceeded daily limit. please wait 24 hrs or visit emailrep.io/key for an api key.");
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.BadGateway)]
+        [InlineData(HttpStatusCode.Conflict)]
+        // etc
+        public void QueryEmailAsync_AnotherError_ThrowsResponseException(HttpStatusCode httpStatusCode)
+        {
+            // Arrange
+            var builder = new HttpRequestInterceptionBuilder()
+                .ForHost("emailrep.io")
+                .ForPath("error@example.com")
+                .ForHttps()
+                .WithStatus(httpStatusCode);
+
+            var options = new HttpClientInterceptorOptions { ThrowOnMissingRegistration = true }
+                .Register(builder);
+
+            var client = options.CreateHttpClient();
+            var settings = new EmailRepClientSettings();
+
+            var sut = new EmailRepClient(client, settings);
+
+            // Act
+            Func<Task> result = () => sut.QueryEmailAsync("error@example.com");
+
+            // Assert
+            result.Should().ThrowExactly<EmailRepResponseException>()
+                .Where(x => x.ErrorCode == ErrorCode.Unknown
+                            && x.OriginalCode == httpStatusCode)
+                .WithMessage("Unknown error occured.");
+        }
+
+        [Fact]
+        public async Task QueryEmailAsync_Success()
+        {
+            // Arrange
+            var settings = new EmailRepClientSettings();
+            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+
+            var client = options.CreateHttpClient();
+            var sut = new EmailRepClient(client, settings);
+
+            // Act
+            var result = await sut.QueryEmailAsync("bill@microsoft.com");
+            
+            // Assert
+            result.Should().NotBeNull();
+            result.Email.Should().Be("bill@microsoft.com");
+            // not checking the mapping code here, so not further processing to be checked.
         }
     }
 }

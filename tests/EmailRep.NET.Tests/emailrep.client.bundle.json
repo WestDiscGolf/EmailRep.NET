@@ -51,14 +51,43 @@
       }
     },
     {
-      "id": "terms",
-      "comment": "Returns the Ts & Cs",
-      "uri": "https://public.je-apis.com/terms",
+      "id": "error-400",
+      "comment": "Returns 400 httpstatus",
+      "uri": "https://emailrep.io/invalid@bob",
+      "status": "400",
       "contentFormat": "json",
       "contentJson": {
-        "Id": 1,
-        "Link": "https://www.just-eat.co.uk/privacy-policy"
+        "status": "fail",
+        "reason": "invalid email"
       }
+    },
+    {
+      "id": "error-401",
+      "comment": "Returns 401 httpstatus",
+      "uri": "https://emailrep.io/api@example.com",
+      "status": "401",
+      "contentFormat": "json",
+      "contentJson": {
+        "status": "fail",
+        "reason": "invalid api key"
+      }
+    },
+    {
+      "id": "error-429",
+      "comment": "Returns 429 httpstatus",
+      "uri": "https://emailrep.io/limit@example.com",
+      "status": "429",
+      "contentFormat": "json",
+      "contentJson": {
+        "status": "fail",
+        "reason": "exceeded daily limit. please wait 24 hrs or visit emailrep.io/key for an api key."
+      }
+    },
+    {
+      "id": "error-404",
+      "comment": "Returns 404 httpstatus",
+      "uri": "https://emailrep.io/notfound@example.com",
+      "status": "404"
     }
   ]
 }
