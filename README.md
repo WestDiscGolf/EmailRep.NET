@@ -1,6 +1,8 @@
 # EmailRep.NET
 Small .NET client to access emailrep.io
 
+![.NET Core](https://github.com/WestDiscGolf/EmailRep.NET/workflows/.NET%20Core/badge.svg)
+
 # Quick Start
 
 Reference the nuget package
