@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="emailrep.client.bundle.json">
+    <None Update="EmailRepClientTest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

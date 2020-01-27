@@ -9,6 +9,8 @@ namespace EmailRep.NET.Tests
 {
     public class EmailRepClientTest
     {
+        private const string BundleFileName = "EmailRepClientTest.json";
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
@@ -16,7 +18,7 @@ namespace EmailRep.NET.Tests
         {
             // Arrange
             var settings = new EmailRepClientSettings();
-            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+            var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
             var sut = new EmailRepClient(client, settings);
@@ -33,7 +35,7 @@ namespace EmailRep.NET.Tests
         {
             // Arrange
             var settings = new EmailRepClientSettings();
-            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+            var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
             var sut = new EmailRepClient(client, settings);
@@ -54,7 +56,7 @@ namespace EmailRep.NET.Tests
         {
             // Arrange
             var settings = new EmailRepClientSettings();
-            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+            var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
             var sut = new EmailRepClient(client, settings);
@@ -75,7 +77,7 @@ namespace EmailRep.NET.Tests
         {
             // Arrange
             var settings = new EmailRepClientSettings();
-            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+            var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
             var sut = new EmailRepClient(client, settings);
@@ -127,7 +129,7 @@ namespace EmailRep.NET.Tests
         {
             // Arrange
             var settings = new EmailRepClientSettings();
-            var options = new HttpClientInterceptorOptions().RegisterBundle("emailrep.client.bundle.json");
+            var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
             var sut = new EmailRepClient(client, settings);
