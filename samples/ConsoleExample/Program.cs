@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using EmailRep.NET;
 
 namespace ConsoleExample
 {
@@ -15,10 +16,16 @@ namespace ConsoleExample
             settings.ApiKey = "**** insert api key here ****";
 
             var emailRepClient = new EmailRep.NET.EmailRepClient(client, settings);
+            try
+            {
+                var response = await emailRepClient.QueryEmailAsync("bill@microsoft.com");
 
-            var response = await emailRepClient.QueryEmailAsync("bill@microsoft.com");
-
-            Console.WriteLine($"Name: {response.Email} ({response.Reputation}).");
+                Console.WriteLine($"Name: {response.Email} ({response.Reputation}).");
+            }
+            catch (EmailRepException e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
