@@ -17,5 +17,3 @@ jobs:
       run: dotnet build --configuration Release
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-restore
-    - name: pack the main library
-      run: dotnet pack .\src\EmailRep.NET\EmailRep.NET.csproj --configuration Release --no-restore 
