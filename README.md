@@ -1,7 +1,7 @@
 # EmailRep.NET
 Small .NET client to access emailrep.io
 
-![.NET Core](https://github.com/WestDiscGolf/EmailRep.NET/workflows/.NET%20Core/badge.svg) [![Build Status](https://dev.azure.com/westdiscgolf/EmailRep.NET/_apis/build/status/WestDiscGolf.EmailRep.NET?branchName=master)](https://dev.azure.com/westdiscgolf/EmailRep.NET/_build/latest?definitionId=4&branchName=master)
+![.NET Core](https://github.com/WestDiscGolf/EmailRep.NET/workflows/.NET%20Core/badge.svg) 
 
 # Quick Start
 
