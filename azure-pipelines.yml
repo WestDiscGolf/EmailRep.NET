@@ -14,15 +14,24 @@ variables:
 
 steps:
 - task: UseDotNet@2
+  displayName: set sdk version
   inputs:
     packageType: 'sdk'
     version: '3.1.100'
 - task: DotNetCoreCLI@2
+  displayName: 'Build packages'
   inputs:
     command: 'build'
     arguments: '--configuration $(buildConfiguration)'
 - task: DotNetCoreCLI@2
+  displayName: 'Run tests'
   inputs:
     command: 'test'
-    arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
+    projects: 'tests/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-build --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\'
     testRunTitle: 'Code Coverage'
+- task: reportgenerator@4
+  displayName: 'Generate report'
+  inputs:
+    reports: '$(Build.SourcesDirectory)\TestResults\Coverage\coverage.cobertura.xml'
+    targetdir: '$(Build.SourcesDirectory)\coveragereport'
