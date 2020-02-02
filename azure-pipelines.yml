@@ -11,6 +11,8 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
 steps:
 - task: UseDotNet@2
@@ -27,33 +29,19 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: dotnet test
   inputs:
-    command: test
-    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+    command: 'test'
+    arguments: '--configuration $(BuildConfiguration) --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
     projects: 'tests/**/*.csproj'
     nobuild: true
 
-# Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
-# First install the tool on the machine, then run it
-#- script: |
-#    dotnet tool install -g dotnet-reportgenerator-globaltool
-#    reportgenerator -reports:$(Build.SourcesDirectory)/tests/EmailRep.NET.Tests/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
-#  displayName: Create Code coverage report
+- script: |
+    dotnet tool install -g dotnet-reportgenerator-globaltool
+    reportgenerator "-reports:$(Build.SourcesDirectory)/**/**/coverage.cobertura.xml" "-targetdir:$(Build.SourcesDirectory)/CodeCoverage" "-reporttypes:HtmlInline_AzurePipelines;Cobertura"
+  displayName: 'Generate Code Coverage Report'
 
-- task: reportgenerator@4
-  displayName: 'Create Code coverage report'
-  inputs:
-    reports: '$(Build.SourcesDirectory)/tests/EmailRep.NET.Tests/coverage.cobertura.xml'
-    targetdir: '$(Build.SourcesDirectory)/CodeCoverage'
-    reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
-
-# Publish the code coverage result (summary and web site)
-# The summary allows to view the coverage percentage in the summary tab
-# The web site allows to view which lines are covered directly in Azure Pipeline
 - task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage'
+  displayName: 'Publish Code Coverage Report'
   inputs:
-    codeCoverageTool: 'Cobertura'
+    codeCoverageTool: Cobertura
     summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
-    pathToSources: '$(System.DefaultWorkingDirectory)'
     reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
-
