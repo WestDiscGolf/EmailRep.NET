@@ -45,3 +45,24 @@ steps:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Create nuget packages'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.csproj'
+    nobuild: true
+    versioningScheme: 'off'
+
+- task: CopyFiles@2
+  displayName: 'Copy Nuget Packages To Release Folder'
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: |
+      Packages/**/*.nupkg
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Release/NuGet'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Release Artifacts'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Release'
