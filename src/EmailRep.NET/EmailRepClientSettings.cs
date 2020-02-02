@@ -13,7 +13,7 @@
         /// <summary>
         /// Request UserAgent. A specific user agent is required for making requests to the email rep api.
         /// </summary>
-        public string UserAgent { get; set; } = "test/development";
+        public string UserAgent { get; set; }
 
         /// <summary>
         /// ApiKey. This is optional.

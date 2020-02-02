@@ -11,17 +11,18 @@ namespace EmailRep.NET.Tests
     {
         private const string BundleFileName = "EmailRepClientTest.json";
 
+        private EmailRepClientSettings _settings = new EmailRepClientSettings {UserAgent = "unit-tests"};
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
         public void QueryEmailAsync_InvalidEmail_ThrowsException(string emailAddress)
         {
             // Arrange
-            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client, settings);
+            var sut = new EmailRepClient(client, _settings);
 
             // Act
             Func<Task> result = () => sut.QueryEmailAsync(emailAddress);
@@ -34,11 +35,10 @@ namespace EmailRep.NET.Tests
         public void QueryEmailAsync_InvalidEmail_ThrowsResponseException()
         {
             // Arrange
-            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client, settings);
+            var sut = new EmailRepClient(client, _settings);
 
             // Act
             Func<Task> result = () => sut.QueryEmailAsync("invalid@bob");
@@ -55,11 +55,10 @@ namespace EmailRep.NET.Tests
         public void QueryEmailAsync_InvalidApiKey_ThrowsResponseException()
         {
             // Arrange
-            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client, settings);
+            var sut = new EmailRepClient(client, _settings);
 
             // Act
             Func<Task> result = () => sut.QueryEmailAsync("api@example.com");
@@ -76,11 +75,10 @@ namespace EmailRep.NET.Tests
         public void QueryEmailAsync_DailyLimitHit_ThrowsResponseException()
         {
             // Arrange
-            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client, settings);
+            var sut = new EmailRepClient(client, _settings);
 
             // Act
             Func<Task> result = () => sut.QueryEmailAsync("limit@example.com");
@@ -110,9 +108,8 @@ namespace EmailRep.NET.Tests
                 .Register(builder);
 
             var client = options.CreateHttpClient();
-            var settings = new EmailRepClientSettings();
 
-            var sut = new EmailRepClient(client, settings);
+            var sut = new EmailRepClient(client, _settings);
 
             // Act
             Func<Task> result = () => sut.QueryEmailAsync("error@example.com");
@@ -128,11 +125,10 @@ namespace EmailRep.NET.Tests
         public async Task QueryEmailAsync_Success()
         {
             // Arrange
-            var settings = new EmailRepClientSettings();
             var options = new HttpClientInterceptorOptions().RegisterBundle(BundleFileName);
 
             var client = options.CreateHttpClient();
-            var sut = new EmailRepClient(client, settings);
+            var sut = new EmailRepClient(client, _settings);
 
             // Act
             var result = await sut.QueryEmailAsync("bill@microsoft.com");
