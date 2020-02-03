@@ -14,11 +14,11 @@ variables:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
-steps:
-- powershell: |
-    Write-Host "Initializing $(Build.ArtifactStagingDirectory)/Release"
-    New-Item -Path $(Build.ArtifactStagingDirectory) -Name "Release" -ItemType "directory"
-  displayName: 'Initialize Artifact Staging Release Directory'
+# steps:
+# - powershell: |
+#     Write-Host "Initializing $(Build.ArtifactStagingDirectory)/Release"
+#     New-Item -Path $(Build.ArtifactStagingDirectory) -Name "Release" -ItemType "directory"
+#   displayName: 'Initialize Artifact Staging Release Directory'
 
 - task: UseDotNet@2
   displayName: 'Use sdk version'
@@ -59,20 +59,20 @@ steps:
     versioningScheme: 'off'
     verbosityPack: 'Normal'
 
-- task: CopyFiles@2
-  displayName: 'Copy Nuget Packages To Release Folder'
-  inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)'
-    Contents: |
-      Packages/**/*.nupkg
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/Release/NuGet'
+# - task: CopyFiles@2
+#   displayName: 'Copy Nuget Packages To Release Folder'
+#   inputs:
+#     SourceFolder: '$(Build.ArtifactStagingDirectory)'
+#     Contents: |
+#       Packages/**/*.nupkg
+#     TargetFolder: '$(Build.ArtifactStagingDirectory)/Release/NuGet'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Release Artifacts'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Release'
+# - task: PublishBuildArtifacts@1
+#   displayName: 'Publish Release Artifacts'
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)/Release'
 
-- task: NuGetToolInstaller@0
-  inputs:
-    versionSpec: '5.1.0'
+# - task: NuGetToolInstaller@0
+#   inputs:
+#     versionSpec: '5.1.0'
 
