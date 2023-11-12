@@ -79,7 +79,7 @@ namespace EmailRep.NET.Models
         /// Days since the domain was created
         /// </summary>
         [J("days_since_domain_creation")]
-        public long DaysSinceDomainCreation { get; set; }
+        public long? DaysSinceDomainCreation { get; set; }
 
         /// <summary>
         /// Suspicious tld
